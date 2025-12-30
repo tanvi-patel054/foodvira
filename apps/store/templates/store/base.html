@@ -1,0 +1,243 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {% endblock %} | foodvira</title>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
+    <style>
+        .black-ops-one-regular {
+            font-family: "Black Ops One", system-ui;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 32px;
+            color: #11b882;
+        }
+
+        .nav-link {
+            position: relative;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            width: 0%;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #16a34a;
+            /* green */
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #16a34a;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 0.25s ease-out;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="text-gray-700 body-font shadow-sm">
+        <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+
+            <!-- Logo -->
+            <a href="{% url 'index' %}" class="flex items-center mb-4 md:mb-0">
+                <img src="{% static 'store/images/logo.png' %}" width="80" alt="Logo">
+            </a>
+
+            <!-- Navigation -->
+            <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center gap-6">
+
+                <a href="{% url 'index' %}" class="nav-link">Home</a>
+                <a href="{% url 'products' %}" class="nav-link">Products</a>
+                <a href="{% url 'blog' %}" class="nav-link">Blogs</a>
+                <a href="{% url 'about' %}" class="nav-link">About</a>
+                <a href="{% url 'contact' %}" class="nav-link">Contact</a>
+
+            </nav>
+
+            <!-- Inquiry Button -->
+            <a href="{% url 'contact' %}"
+                class="inline-flex items-center bg-green-600 text-white px-5 py-2 mt-2 rounded-full hover:bg-green-700 transition">
+                Contact Us
+            </a>
+        </div>
+        <!-- Modal Background -->
+        <div id="inquiryModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+
+            <!-- Modal Box -->
+            <div class="bg-white rounded-xl shadow-xl w-full max-w-lg p-6 relative animate-fadeIn">
+
+                <!-- Close Button -->
+                <button onclick="closeModal()"
+                    class="absolute top-3 right-4 text-gray-500 hover:text-black text-xl">&times;</button>
+
+                <h2 class="text-2xl font-semibold mb-4 text-gray-800">Send Inquiry</h2>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <input type="text" placeholder="Your Name"
+                            class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="email" placeholder="Email"
+                            class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="text" placeholder="Product Name"
+                            class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    </div>
+
+                    <div class="mb-3">
+                        <textarea rows="3" placeholder="Quantity & Requirements"
+                            class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"></textarea>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">
+                        Submit Inquiry
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </header>
+    <hr>
+    <!-- start message section -->
+    {% if messages %}
+    {% for message in messages %}
+    <div class="p-4 mb-4 rounded-lg text-white flex items-center justify-between {% if message.tags == 'error' %}bg-red-500{% elif message.tags == 'warning' %}bg-yellow-400{% elif message.tags == 'success' %}bg-green-500{% elif message.tags == 'info' %}bg-blue-400{% endif %}"
+        role="alert">
+        <p>{{ message }}</p>
+        <button type="button" class="ml-4 px-2 py-1 rounded bg-gray-800 text-white hover:bg-gray-700"
+            onclick="this.parentElement.remove();" aria-label="Close">
+            &times;
+        </button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    <!-- end message section -->
+    {% block body %}
+    {% endblock %}
+    <hr>
+    <footer class="text-gray-600 body-font bg-gray-50">
+        <div class="container px-5 py-24 mx-auto">
+            <div class="flex flex-wrap md:text-left text-center -mx-4">
+
+                <!-- Column 1: About FoodVira -->
+                <div class="lg:w-1/4 md:w-1/2 w-full px-4 mb-8 md:mb-0">
+                    <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">ABOUT FOODVIRA</h2>
+                    <p class="text-gray-600 text-sm">
+                        FoodVira delivers delicious dishes crafted with fresh ingredients and love. Experience the
+                        flavors you crave, straight to your doorstep.
+                    </p>
+                </div>
+
+                <!-- Column 2: Pages -->
+                <div class="lg:w-1/4 md:w-1/2 w-full px-4 mb-8 md:mb-0">
+                    <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">PAGES</h2>
+                    <nav class="list-none mb-10">
+                        <li><a href="{% url 'index' %}" class="text-gray-600 hover:text-gray-800">Home</a></li>
+                        <li><a href="{% url 'products' %}" class="text-gray-600 hover:text-gray-800">Products</a></li>
+                        <li><a href="{% url 'blog' %}" class="text-gray-600 hover:text-gray-800">Blogs</a></li>
+                        <li><a href="{% url 'contact' %}" class="text-gray-600 hover:text-gray-800">Contact Us</a></li>
+                    </nav>
+                </div>
+
+                <!-- Column 3: Selling On Platforms -->
+                <div class="lg:w-1/4 md:w-1/2 w-full px-4 mb-8 md:mb-0">
+                    <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">WE ARE SELLING ON</h2>
+                    <nav class="list-none mb-10">
+                        <li><a href="https://www.amazon.in" target="_blank"
+                                class="text-gray-600 hover:text-gray-800">Amazon</a></li>
+                        <li><a href="https://www.flipkart.com" target="_blank"
+                                class="text-gray-600 hover:text-gray-800">Flipkart</a></li>
+                        <li><a href="https://www.swiggy.com" target="_blank"
+                                class="text-gray-600 hover:text-gray-800">Swiggy</a></li>
+                        <li><a href="https://www.zomato.com" target="_blank"
+                                class="text-gray-600 hover:text-gray-800">Zomato</a></li>
+                    </nav>
+                </div>
+
+                <!-- Column 4: Contact Details -->
+                <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+                    <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">CONTACT</h2>
+                    <p class="text-gray-600 text-sm mb-2">FoodVira Pvt Ltd</p>
+                    <p class="text-gray-600 text-sm mb-2">123 Food Street, Mumbai, India</p>
+                    <p class="text-gray-600 text-sm mb-2">Email: info@foodvira.com</p>
+                    <p class="text-gray-600 text-sm">Phone: +91 9876543210</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="bg-gray-100">
+            <div class="container px-5 py-6 mx-auto flex flex-col sm:flex-row items-center justify-between">
+                <a class="flex title-font font-medium items-center text-gray-900 mb-4 sm:mb-0">
+                    <img src="{% static 'store/images/logo.png' %}" width="80" alt="FoodVira Logo">
+                </a>
+                <p class="text-sm text-gray-500 sm:ml-6 sm:mt-0 mt-4">© 2025 FoodVira —
+                    <a href="https://twitter.com/knyttneve" target="_blank"
+                        class="text-gray-600 ml-1">@BharatFuturistAi</a>
+                </p>
+                <span class="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
+                    <a class="text-gray-500 hover:text-gray-700"><i class="fab fa-facebook-f"></i></a>
+                    <a class="ml-3 text-gray-500 hover:text-gray-700"><i class="fab fa-twitter"></i></a>
+                    <a class="ml-3 text-gray-500 hover:text-gray-700"><i class="fab fa-instagram"></i></a>
+                    <a class="ml-3 text-gray-500 hover:text-gray-700"><i class="fab fa-linkedin-in"></i></a>
+                </span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function openModal() {
+            document.getElementById('inquiryModal').classList.remove('hidden');
+            document.getElementById('inquiryModal').classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('inquiryModal').classList.add('hidden');
+            document.getElementById('inquiryModal').classList.remove('flex');
+        }
+    </script>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+
+</html>

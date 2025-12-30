@@ -1,0 +1,134 @@
+{% extends 'store/base.html' %}
+{% block title %}
+Index
+{% endblock %}
+
+{% block body %}
+<section class="text-gray-600 body-font">
+  <div class="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
+    <div
+      class="lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
+      <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">FoodVira – Taste That Speaks
+      </h1>
+      <p class="mb-8 leading-relaxed">Discover delicious meals made with fresh ingredients and rich flavors. Every dish
+        is carefully prepared to satisfy your hunger and cravings. FoodVira delivers quality food straight to your
+        doorstep, fast and fresh.</p>
+      <div class="flex justify-center">
+        <a href="{% url 'contact' %}"
+          class="inline-flex text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded text-lg">Connect
+          with us</a>
+        <a href="{% url 'products' %}"
+          class="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg">Explore
+          our products</a>
+      </div>
+    </div>
+    <div class="lg:max-w-sm lg:w-1/3 md:w-1/2 w-4/6">
+      <img class="object-cover object-center rounded h-64 w-full" alt="hero"
+        src="https://t4.ftcdn.net/jpg/16/56/73/03/360_F_1656730348_cmE3KZSIF9cMhuQSWtZf0oMnpGhjUsbx.jpg">
+    </div>
+
+  </div>
+</section>
+
+<section class="text-gray-600 body-font">
+  <div class="container px-5 py-24 mx-auto">
+    <div class="flex flex-col text-center w-full mb-20">
+      <h1 class="text-2xl font-medium title-font mb-4 text-gray-900 tracking-widest">OUR LATEST PRODUCTS</h1>
+      <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Introducing our newest collection, made with passion and
+        precision. Experience innovation, quality, and flavor in every product.</p>
+    </div>
+    <div class="flex flex-wrap -m-4 justify-center">
+      {% for product in products %}
+      <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
+        <a class="block relative  rounded overflow-hidden">
+          <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="{{ product.image.url }}">
+        </a>
+        <div class="mt-4 text-center lg:text-left">
+          <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">
+            {{ product.category.name }}
+          </h3>
+          <a href="{% url 'product_detail' product_id=product.id %}"
+            class="text-gray-900 title-font text-lg font-medium">
+            {{ product.title }}
+          </a>
+          <p class="mt-1">₹{{ product.price }}</p>
+        </div>
+      </div>
+      {% empty %}
+      <div class="w-full text-center py-16">
+        <p class="text-gray-500 text-lg">
+          No products available at the moment.
+        </p>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+<section class="text-gray-600 body-font">
+  <div class="container px-5 py-24 mx-auto">
+    <div class="flex flex-col text-center w-full mb-20">
+      <h1 class="text-2xl font-medium title-font mb-4 text-gray-900 tracking-widest">OUR BLOGS</h1>
+      <p class="lg:w-2/3 mx-auto leading-relaxed text-base">
+        Explore food stories, recipes, and tips crafted to inspire your taste buds.
+        From fresh ingredients to flavorful dishes, discover the joy of good food.
+      </p>
+
+    </div>
+    <div class="flex flex-wrap -mx-4 -my-8 justify-center">
+      {% for blog in blogs %}
+      <div class="py-8 px-4 lg:w-1/3 md:w-1/2 w-full">
+        <div class="h-full flex items-start">
+
+          <!-- Date -->
+          <div class="w-12 flex-shrink-0 flex flex-col text-center leading-none">
+            <span class="text-gray-500 pb-2 mb-2 border-b-2 border-gray-200">
+              {{ blog.created_at|date:"M" }}
+            </span>
+            <span class="font-medium text-lg text-gray-800 title-font leading-none">
+              {{ blog.created_at|date:"d" }}
+            </span>
+          </div>
+
+          <!-- Content -->
+          <div class="flex-grow pl-6">
+            <img class="lg:h-48 md:h-36 w-full object-cover object-center border-solid rounded-md"
+              src="{{ blog.image.url }}" alt="{{ blog.title }}">
+            <h2 class="tracking-widest text-xs title-font font-medium text-green-500 mb-1 mt-5">
+              {{ blog.category.name }}
+            </h2>
+
+            <h1 class="title-font text-xl font-medium text-gray-900 mb-3">
+              {{ blog.title }}
+            </h1>
+
+            <p class="leading-relaxed mb-5">
+              {{ blog.content|truncatewords:20 }}
+            </p>
+
+            <a href="{% url 'blog_detail' blog_id=blog.id %}"
+              class="text-green-500 inline-flex items-center md:mb-2 lg:mb-0">
+              Read More
+              <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"></path>
+                <path d="M12 5l7 7-7 7"></path>
+              </svg>
+            </a>
+
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="w-full text-center py-16">
+        <p class="text-gray-500 text-lg">
+          No blogs available right now.
+        </p>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends 'store/base.html' %}
+{% block title %}
+Products
+{% endblock %}
+
+{% block body %}
+<section class="text-gray-600 body-font">
+  <div class="container px-5 py-16 mx-auto">
+
+    <!-- ================= CATEGORY FILTER ================= -->
+    <div class="flex flex-wrap gap-3 mb-10 justify-center">
+
+      <!-- All -->
+      <a
+        href="{% url 'products' %}"
+        class="px-4 pb-2 rounded-full border
+        {% if not selected_category %}
+          bg-green-600 text-white
+        {% else %}
+          hover:bg-gray-100
+        {% endif %}"
+      >
+        All
+      </a>
+
+      {% for category in categories %}
+      <a
+        href="?category={{ category.id }}"
+        class="px-4 pb-2 rounded-full border
+        {% if selected_category == category.id|stringformat:'s' %}
+          bg-green-600 text-white
+        {% else %}
+          hover:bg-gray-100
+        {% endif %}"
+      >
+        {{ category.name }}
+      </a>
+      {% endfor %}
+    </div>
+
+    <!-- ================= PRODUCTS GRID ================= -->
+    <div class="flex flex-wrap -m-4">
+      {% for product in products %}
+      <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
+        <a class="block relative rounded overflow-hidden">
+          <img
+            alt="{{ product.title }}"
+            class="object-cover object-center w-full h-auto block"
+            src="{{ product.image.url }}"
+          >
+        </a>
+
+        <div class="mt-4">
+          <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">
+            {{ product.category.name }}
+          </h3>
+
+          <a
+            href="{% url 'product_detail' product_id=product.id %}"
+            class="text-gray-900 title-font text-lg font-medium hover:text-green-600"
+          >
+            {{ product.title }}
+          </a>
+
+          <p class="mt-1 font-semibold">₹{{ product.price }}</p>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-center w-full text-gray-500">
+        No products found.
+      </p>
+      {% endfor %}
+    </div>
+
+    <!-- ================= PAGINATION ================= -->
+    {% if page_obj.paginator.num_pages > 1 %}
+    <div class="flex justify-center mt-12">
+      <nav class="flex items-center gap-2 flex-wrap">
+
+        <!-- Previous -->
+        {% if page_obj.has_previous %}
+        <a
+          href="?page={{ page_obj.previous_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}"
+          class="px-4 py-2 border rounded-lg hover:bg-gray-100"
+        >
+          Previous
+        </a>
+        {% endif %}
+
+        <!-- Page Numbers -->
+        {% for num in page_obj.paginator.page_range %}
+          {% if num == page_obj.number %}
+            <span class="px-4 py-2 bg-green-600 text-white rounded-lg">
+              {{ num }}
+            </span>
+          {% else %}
+            <a
+              href="?page={{ num }}{% if selected_category %}&category={{ selected_category }}{% endif %}"
+              class="px-4 py-2 border rounded-lg hover:bg-gray-100"
+            >
+              {{ num }}
+            </a>
+          {% endif %}
+        {% endfor %}
+
+        <!-- Next -->
+        {% if page_obj.has_next %}
+        <a
+          href="?page={{ page_obj.next_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}"
+          class="px-4 py-2 border rounded-lg hover:bg-gray-100"
+        >
+          Next
+        </a>
+        {% endif %}
+
+      </nav>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,121 @@
+
+Step - 1 : clone your repository in your local system 
+...\(specific folder)>git clone https://github.com/Witzcode0/Fudvirapy.git
+
+...\(specific folder)>cd Fudvirapy
+
+...\(specific folder)\Fudvirapy>
+
+Step - 2:
+Make sure you have installed python
+...\(specific folder)\Fudvirapy> python --version
+Python 3.13.5
+
+Step - 3 : create virtual environment
+...\(specific folder)\Fudvirapy> python -m venv myvenv
+
+Step - 4 : Active and Deactive your virtual env
+Active:
+...\(specific folder)\Fudvirapy> myvenv\Scripts\activate 
+
+Deactive:
+(myvenv) ...\(specific folder)\Fudvirapy> myvenv\Scripts\deactivate 
+
+Step - 5 : Install Django
+Before install any module or package make sure your virtual env. is active or not
+(myvenv) ...\(specific folder)\Fudvirapy> pip install django
+
+Step - 6 : create requirements.txt for manage modules and package version
+(myvenv) ...\(specific folder)\Fudvirapy> type nul > requirements.txt
+
+Step - 7 : add all installed modules and packages inside the requirments.txt
+(myvenv) ...\(specific folder)\Fudvirapy> pip freeze > requirements.txt
+
+Step - 8 : Check installed modules and packages inside virtual env.
+(myvenv) ...\(specific folder)\Fudvirapy> pip list / pip freeze
+Package  Version
+-------- -------
+asgiref  3.11.0
+Django   6.0
+pip      25.3
+sqlparse 0.5.4
+tzdata   2025.3
+
+Step - 9 : create django project
+(myvenv) ...\(specific folder)\Fudvirapy> django-admin startproject project .
+
+Step - 10 : run you django project
+(myvenv) ...\(specific folder)\Fudvirapy> python manage.py runserver
+
+Step - 11 : create your apps inside "apps" dir
+(myvenv) ...\(specific folder)\Fudvirapy> mkdir apps
+(myvenv) ...\(specific folder)\Fudvirapy\apps> mkdir accounts
+(myvenv) ...\(specific folder)\Fudvirapy\apps> mkdir products
+(myvenv) ...\(specific folder)\Fudvirapy\apps> cd ..
+(myvenv) ...\(specific folder)\Fudvirapy> python manage.py startapp accounts apps\accounts
+(myvenv) ...\(specific folder)\Fudvirapy> python manage.py startapp products apps\products
+
+Setup app:
+Go to the app dir and inside apps.py
+
+from django.apps import AppConfig
+
+class AccountsConfig(AppConfig):
+    name = 'apps.[app-nam]'
+
+Register your apps in project dir inside settings.py
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'apps.accounts', # new added
+    'apps.products', # new added
+]
+
+Step - 12 : migarte all built int table in database
+(myvenv) ...\(specific folder)\Fudvirapy> python manage.py migrate
+
+Step - 13 : create super admin
+(myvenv) ...\(specific folder)\Fudvirapy> python manage.py createsuperuser
+Username (leave blank to use 'admin'): admin
+Email address: admin
+Error: Enter a valid email address.
+Email address: admin@gmail.com
+Password:********
+Password (again):********
+The password is too similar to the username.
+This password is too short. It must contain at least 8 characters.
+This password is too common.
+Bypass password validation and create user anyway? [y/N]: y
+Superuser created successfully.
+
+
+(myvenv) ...\(specific folder)\Fudvirapy> git add .
+(myvenv) ...\(specific folder)\Fudvirapy> git commit -m "project setup"
+(myvenv) ...\(specific folder)\Fudvirapy> git push
+
+Github credential:
+------------------
+Email : pateltanvi054@gmail.com
+Username : tanvi-patel054
+Password : Eva@#$6677
+
+pythonanywhere.com
+User : foodvira
+Email : pateltanvi054@gmail.com
+Password : Eva@#$6677
+--------------------
+
+
+change dir and go to the Fudvira dir
+ create virtual env : (myvenv) ...\(specific folder)\Fudvirapy> python -m venv myvenv
+ activate virtual env : (myvenv) ...\(specific folder)\Fudvirapy> source myvenv/bin/activate
+
+ install all modules and packages from requirments.txt
+ (myvenv) ...\(specific folder)\Fudvirapy> pip install -r requirements.txt 
+
+https://docs.djangoproject.com/en/6.0/topics/db/models/
